@@ -24,9 +24,11 @@ export default async function Home() {
       <main className="min-h-screen min-w-[320px] bg-gradient-to-b from-[#2e026d] to-[#ad73ff] text-white">
         <div className="flex items-center justify-end">
           <div>
-            <Link href="/profile" className="text-blue-300 underline">
-              Profile
-            </Link>
+            {effectiveSession && (
+              <Link href="/profile" className="text-blue-300 underline">
+                Profile
+              </Link>
+            )}
           </div>
           <div>
             <div className="p-3">
