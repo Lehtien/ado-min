@@ -76,14 +76,19 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.TWITTER_CLIENT_SECRET,
       version: "2.0",
       authorization: {
+        url: "https://twitter.com/i/oauth2/authorize",
         params: {
-          scope: "users.read offline.access",
+          scope: "users.read tweet.read offline.access",
         },
       },
-      profile(profile: { data: { id: string; name: string } }) {
+      profile(profile: { data: {
+        profile_image_url: string | null | undefined; id: string; name: string 
+} }) {
         return {
           id: profile.data.id,
           name: profile.data.name,
+          email: null, // Twitter doesn't provide email by default
+          image: profile.data.profile_image_url,
         };
       }
     }),
