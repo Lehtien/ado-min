@@ -58,7 +58,7 @@ export const authOptions: NextAuthOptions = {
       authorization: {
         url: "https://twitter.com/i/oauth2/authorize",
         params: {
-          scope: "users.read, offline.access",
+          scope: "users.read",
         },
       },
     }),
