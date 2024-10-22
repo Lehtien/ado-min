@@ -70,13 +70,13 @@ export const postRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const items = await ctx.db.post.findMany({
-        where: {
-          ...(ctx.session?.user?.id ? {
-            NOT: {
-              createdById: ctx.session.user.id  // セッションがある場合のみ自分のポストを除外
+        where: ctx.session?.user?.id 
+          ? {
+              NOT: {
+                createdById: ctx.session.user.id
+              }
             }
-          } : {})  // セッションがない場合は条件なし
-        },
+          : {},
         take: input.limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
         orderBy: {
@@ -97,7 +97,7 @@ export const postRouter = createTRPCRouter({
     }),
 
   // フィルター付き全件取得
-  getFilteredPosts: protectedProcedure
+  getFilteredPosts: publicProcedure
   .input(
     z.object({
       likeMusic1: z.string().optional(),
