@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
       version: "2.0",
       authorization: {
         params: {
-          scope: "users.read",
+          scope: "users.read, offline.access",
         },
       },
     }),
