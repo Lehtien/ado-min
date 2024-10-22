@@ -52,9 +52,9 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
     TwitterProvider({
-      clientId: env.TWITTER_CLIENT_ID,
-      clientSecret: env.TWITTER_CLIENT_SECRET,
-      version: "2.0",
+      clientId: env.TWITTER_CLIENT_ID!,
+      clientSecret: env.TWITTER_CLIENT_SECRET!,
+      // version: "2.0",
     }),
     ...(isDevelopment
       ? [
