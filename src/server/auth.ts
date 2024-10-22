@@ -23,6 +23,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      accessToken?: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -32,6 +33,14 @@ declare module "next-auth" {
   //   // ...other properties
   //   // role: UserRole;
   // }
+  interface User {
+    id: string;
+  }
+  interface JWT {
+    id?: string;
+    accessToken?: string;
+    refreshToken?: string;
+  }
 }
 
 /**
@@ -41,13 +50,24 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, user, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
+        id: user?.id ?? token?.sub ?? "unknown",
+        accessToken: token?.accessToken,
       },
     }),
+    jwt: ({ token, user, account }) => {
+      if (user) {
+        token.id = user.id;
+      }
+      if (account) {
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+      }
+      return token;
+    },
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -57,9 +77,15 @@ export const authOptions: NextAuthOptions = {
       version: "2.0",
       authorization: {
         params: {
-          scope: "users.read, offline.access",
+          scope: "users.read offline.access",
         },
       },
+      profile(profile: { data: { id: string; name: string } }) {
+        return {
+          id: profile.data.id,
+          name: profile.data.name,
+        };
+      }
     }),
     ...(isDevelopment
       ? [
@@ -83,6 +109,10 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  session: {
+    strategy: "jwt", // JWTベースのセッション
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
 };
 
 /**
