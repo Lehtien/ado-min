@@ -1,8 +1,8 @@
 import Link from "next/link";
-
-import { LatestPost } from "~/app/_components/post";
 import { getServerAuthSession } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
+import PagenatedPosts from "./_components/pagenatedPosts";
+import RelatedProfiles from "./_components/relatedProfiles";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -20,32 +20,55 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-center text-2xl text-white">
-                {effectiveSession && (
-                  <span>Logged in as {effectiveSession.user?.name}</span>
-                )}
-              </p>
+      <main className="min-h-screen min-w-[320px] bg-gradient-to-b from-[#2e026d] to-[#ad73ff] text-white">
+        <div className="flex items-center justify-end">
+          <div>
+            <Link href="/profile" className="text-blue-300 underline">
+              Profile
+            </Link>
+          </div>
+          <div>
+            <div className="p-3">
               <Link
                 href={
                   effectiveSession ? "/api/auth/signout" : "/api/auth/signin"
                 }
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
+                className="rounded-md bg-white px-4 py-2 font-semibold text-[#2e026d] no-underline transition hover:bg-white/20"
               >
                 {effectiveSession ? "Sign out" : "Sign in"}
               </Link>
             </div>
           </div>
-          {isDevelopment && !session && (
+          {isDevelopment && !effectiveSession && (
             <p className="text-sm text-yellow-300">
               Auto-signed in for development. Sign in/out disabled.
             </p>
           )}
+        </div>
 
-          {effectiveSession?.user && <LatestPost />}
+        <div>
+          <p className="mt-2 text-center">Adoのファンのための</p>
+          <h1 className="mb-6 mt-2 text-center text-2xl font-bold">
+            Ado民 プロフィール
+          </h1>
+        </div>
+
+        <div className="min-h-[100px]">
+          <h2 className="mb-2 ml-4 text-xl font-bold">
+            関連のあるプロフィール
+          </h2>
+          <div>
+            <div className="mx-4 overflow-y-scroll">
+              <RelatedProfiles />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="mb-2 ml-4 text-xl font-bold">一覧</h2>
+          <div className="mx-4">
+            <PagenatedPosts />
+          </div>
         </div>
       </main>
     </HydrateClient>

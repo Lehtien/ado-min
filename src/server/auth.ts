@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
             name: "Development",
             credentials: {},
             authorize: async () => {
-              return { id: "dev-user", name: "Dev User", email: "dev@example.com" };
+              return { id: "dev-user2", name: "Dev User", email: "dev@example.com" };
             },
           }),
         ]

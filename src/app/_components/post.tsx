@@ -1,10 +1,12 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 import { type postSchema } from "~/server/api/routers/post";
 import { type z } from "zod";
 import { TRPCClientError } from "@trpc/client";
 import FormLabel from "./label";
+import { useRouter } from "next/navigation";
 
 interface TRPCErrorShape {
   code: string;
@@ -18,7 +20,7 @@ interface TRPCErrorShape {
 }
 
 type PostSchemaType = z.infer<typeof postSchema>;
-interface FormData {
+export interface FormData {
   name: string;
   account: string;
   gender: string;
@@ -33,7 +35,9 @@ interface FormData {
 }
 
 export function LatestPost() {
+  const router = useRouter();
   const utils = api.useUtils();
+
   const [formData, setFormData] = useState<PostSchemaType>({
     name: "",
     account: "",
@@ -60,18 +64,45 @@ export function LatestPost() {
     live: "",
     freeSpace: "",
   });
+
+  const { data: latestPost } = api.post.getLatest.useQuery();
   useEffect(() => {
-    const storedData = sessionStorage.getItem("formData");
-    if (storedData) {
-      const parsedData: FormData = JSON.parse(storedData) as FormData;
-      setFormData(parsedData);
-    }
-  }, []);
+    const initializeFormData = () => {
+      try {
+        // セッションストレージのチェック
+        const storedData = sessionStorage.getItem("formData");
+        if (storedData) {
+          // セッションストレージのデータを使用
+          const parsedData = JSON.parse(storedData) as FormData;
+          setFormData(parsedData);
+          return;
+        }
+
+        // セッションストレージにデータがない場合はlatestPostを使用
+        if (latestPost) {
+          setFormData(latestPost);
+        }
+      } catch (error) {
+        console.error("Error initializing form data:", error);
+        // エラーが発生した場合はlatestPostを使用
+        if (latestPost) {
+          setFormData(latestPost);
+        }
+      }
+    };
+
+    initializeFormData();
+  }, [latestPost]);
 
   const createPost = api.post.create.useMutation({
     onSuccess: async () => {
-      await utils.post.invalidate();
-      // フォーム送信成功後の処理（必要に応じて）
+      try {
+        await utils.post.invalidate();
+        sessionStorage.removeItem("formData");
+        router.push("/profile");
+      } catch (error) {
+        console.error("Error during redirection:", error);
+      }
     },
     onError: (error) => {
       if (error instanceof TRPCClientError) {
@@ -261,7 +292,7 @@ export function LatestPost() {
             placeholder="自由記入欄"
             value={formData.freeSpace}
             onChange={handleChange}
-            className="w-full rounded px-4 py-2 text-black"
+            className="h-[200px] w-full rounded px-4 py-2 text-black"
             rows={3}
           />
           {errors.freeSpace && (
@@ -271,7 +302,7 @@ export function LatestPost() {
 
         <button
           type="submit"
-          className="rounded bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
+          className="rounded bg-[#6f51a1] px-10 py-3 font-semibold text-white transition hover:bg-[#5c4390]"
           disabled={createPost.isPending}
         >
           {createPost.isPending ? "Submitting..." : "Submit"}

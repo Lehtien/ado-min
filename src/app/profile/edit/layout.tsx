@@ -6,8 +6,8 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
-  title: "Ado民",
-  description: "Ado民の交流情報サイト",
+  title: "Profile",
+  description: "プロフィールページ",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
