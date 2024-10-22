@@ -3,14 +3,14 @@ import { getServerAuthSession } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 import PagenatedPosts from "./_components/pagenatedPosts";
 import RelatedProfiles from "./_components/relatedProfiles";
-import { api } from "~/trpc/server";
+// import { api } from "~/trpc/server";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export default async function Home() {
   const session = await getServerAuthSession();
 
-  void api.post.getLatest.prefetch();
+  // void api.post.getLatest.prefetch();
 
   const devSession = isDevelopment
     ? { user: { name: "Dev User", email: "dev@example.com" } }
