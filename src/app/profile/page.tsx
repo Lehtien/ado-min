@@ -5,7 +5,7 @@ import ProfileCard from "../_components/profileCard";
 import Link from "next/link";
 
 export default function Profile() {
-  const [latestPost] = api.post.getLatest.useSuspenseQuery();
+  const { data: latestPost } = api.post.getLatest.useQuery();
   return (
     <>
       <nav className="p-4 text-right">

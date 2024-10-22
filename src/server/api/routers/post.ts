@@ -32,6 +32,10 @@ export const postRouter = createTRPCRouter({
   create: protectedProcedure
     .input(postSchema)
     .mutation(async ({ ctx, input }) => {
+      if (!ctx.session) {
+        return null;
+      }
+
         return ctx.db.post.upsert({
           where: { createdById: ctx.session.user.id },
           update: {
@@ -46,6 +50,10 @@ export const postRouter = createTRPCRouter({
     }),
 
   getLatest: protectedProcedure.query(async ({ ctx }) => {
+    if (!ctx.session) {
+      return null;
+    }
+    
     const post = await ctx.db.post.findUnique({
       where: { createdById: ctx.session.user.id },
     });
@@ -63,9 +71,11 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const items = await ctx.db.post.findMany({
         where: {
-          NOT: {
-            createdById: ctx.session.user.id  // 自分のポストを除外
-          }
+          ...(ctx.session?.user?.id ? {
+            NOT: {
+              createdById: ctx.session.user.id  // セッションがある場合のみ自分のポストを除外
+            }
+          } : {})  // セッションがない場合は条件なし
         },
         take: input.limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
@@ -101,10 +111,11 @@ export const postRouter = createTRPCRouter({
     return ctx.db.post.findMany({
       take: 10,
       where: {
-        // 自分以外の条件を追加
-        NOT: {
-          createdById: ctx.session.user.id
-        },
+        ...(ctx.session?.user?.id ? {
+          NOT: {
+            createdById: ctx.session.user.id  // セッションがある場合のみ自分のポストを除外
+          }
+        } : {}),  // セッションがない場合は条件なし
         OR: [
           // likeMusic1の検索条件
           ...(likeMusic1
