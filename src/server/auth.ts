@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     TwitterProvider({
       clientId: env.TWITTER_CLIENT_ID,
       clientSecret: env.TWITTER_CLIENT_SECRET,
-      version: "2.0",
+      // version: "2.0",
       authorization: {
         url: "https://twitter.com/i/oauth2/authorize",
         params: {
