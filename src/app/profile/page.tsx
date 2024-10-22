@@ -44,7 +44,7 @@ export default function Profile() {
         </Link>
       </nav>
 
-      {latestPost && (
+      {/* {latestPost && (
         <>
           <button
             className="mx-auto flex rounded bg-[#5c4390] px-4 py-2 text-white"
@@ -67,7 +67,7 @@ export default function Profile() {
             />
           )}
         </>
-      )}
+      )} */}
     </>
   );
 }

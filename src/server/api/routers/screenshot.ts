@@ -8,7 +8,6 @@ export const screenshotRouter = createTRPCRouter({
     .input(
       z.object({
         selector: z.string(),
-        // 必要に応じて追加のパラメータを定義
       })
     )
     .mutation(async ({ input }) => {
@@ -22,8 +21,7 @@ export const screenshotRouter = createTRPCRouter({
       const page = await browser.newPage();
       
       try {
-        // 開発環境のURLを指定
-        await page.goto('http://localhost:3000/profile');
+        await page.goto('https://ado-min.vercel.app/profile');
         const element = await page.$(input.selector);
         
         if (!element) {
