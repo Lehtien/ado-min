@@ -13,19 +13,16 @@ export default function SiitaRaffleV0Edit() {
   const [status, setStatus] = useState("OPEN");
   const [giveItems, setGiveItems] = useState<CheckboxItem[][]>([]);
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
   const createRaffleMutation = api.raffleV0.create.useMutation({
     onSuccess: () => {
       alert("保存に成功しました");
-      setIsSubmitting(false);
       router.push("/siita-raffle-v0");
     },
     onError: (error) => {
       console.error(error);
-      setIsSubmitting(false);
       alert("保存に失敗しました");
     },
   });
@@ -163,8 +160,6 @@ export default function SiitaRaffleV0Edit() {
         <div className="my-8 flex justify-center">
           <button
             type="submit"
-            disabled={isSubmitting}
-            onClick={() => setIsSubmitting(true)}
             className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             保存する
