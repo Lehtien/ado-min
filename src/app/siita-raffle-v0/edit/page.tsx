@@ -48,11 +48,6 @@ export default function SiitaRaffleV0Edit() {
       .filter((item) => item.checked)
       .map((item) => item.label);
 
-    if (checkedGiveItems.length === 0 || checkedWantItems.length === 0) {
-      alert("譲れるものと求めるものを少なくとも1つずつ選択してください");
-      return;
-    }
-
     createRaffleMutation.mutate({
       xid: xid.trim(),
       give: checkedGiveItems,
