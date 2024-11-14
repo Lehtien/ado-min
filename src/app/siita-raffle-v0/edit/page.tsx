@@ -69,7 +69,7 @@ export default function SiitaRaffleV0Edit() {
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStatus(e.target.value);
+    setStatus(e.target.value as "OPEN" | "CLOSED" | "ADJUSTING");
   };
 
   const giveItemsText = giveItems
