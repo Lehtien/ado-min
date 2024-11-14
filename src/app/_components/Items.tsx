@@ -11,10 +11,11 @@ export interface CheckboxItem {
 
 interface ItemsProps {
   name: string;
+  item: string[];
   onChange?: (items: CheckboxItem[][]) => void;
 }
 
-const Items = ({ name, onChange }: ItemsProps) => {
+const Items = ({ item, onChange }: ItemsProps) => {
   const createInitialData = (): CheckboxItem[][] => {
     return [
       [
@@ -96,7 +97,17 @@ const Items = ({ name, onChange }: ItemsProps) => {
     ];
   };
 
-  const [items, setItems] = useState<CheckboxItem[][]>(createInitialData());
+  let initialData = createInitialData();
+  if (item.length !== 0) {
+    initialData = initialData.map((row) =>
+      row.map((item) => ({
+        ...item,
+        checked: item.label.includes(item.label),
+      })),
+    );
+  }
+
+  const [items, setItems] = useState<CheckboxItem[][]>(initialData);
 
   const handleCheck = (row: number, col: number): void => {
     const newItems = items.map((rowItems, rowIndex) =>

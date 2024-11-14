@@ -86,6 +86,11 @@ export default function SiitaRaffleV0Edit() {
   #LARMEfes
   `;
 
+  const { data: LatestRaffleV0, error } = api.raffleV0.getLatest.useQuery();
+  if (error) {
+    console.error("Failed to fetch latest raffle:", error);
+  }
+
   return (
     <div>
       <Link
@@ -127,11 +132,19 @@ export default function SiitaRaffleV0Edit() {
         <div className="md: mt-8 flex flex-wrap gap-2 md:justify-center">
           <div>
             <h1 className="text-xl font-bold">・譲れるもの</h1>
-            <Items name="give" onChange={setGiveItems} />
+            <Items
+              name="give"
+              onChange={setGiveItems}
+              item={LatestRaffleV0?.give ?? []}
+            />
           </div>
           <div className="mt-8 md:mt-0">
             <h1 className="text-xl font-bold">・求めるもの</h1>
-            <Items name="want" onChange={setWantItems} />
+            <Items
+              name="want"
+              onChange={setWantItems}
+              item={LatestRaffleV0?.want ?? []}
+            />
           </div>
         </div>
         <div className="mt-8 text-center">
