@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
+import { getRaffleStatusLabel } from "../../constants/raffle";
 
 import { api } from "~/trpc/server";
 
@@ -61,14 +62,32 @@ export default async function SiitaRaffleV0() {
         <div className="flex justify-center">
           <div className="w-[320px]">
             <h1 className="text-center text-2xl font-bold">最新:</h1>
-            <ul>
-              {FilterRaffleV0?.map((raffleV0) => (
-                <li key={raffleV0.id}>
-                  <p>{raffleV0.give}</p>
-                  <p>{raffleV0.want}</p>
+            {FilterRaffleV0?.map((raffleV0) => (
+              <ul className="m-2 rounded-xl border p-4" key={raffleV0.id}>
+                <div className="flex justify-between">
+                  <Link
+                    href={`https://x.com/${encodeURIComponent(raffleV0.xid)}`}
+                    className="underline"
+                    target="_blank"
+                  >
+                    @{raffleV0.xid}
+                  </Link>
+                  <p>{getRaffleStatusLabel(raffleV0.status)}</p>
+                </div>
+                <p className="mt-2 font-bold">譲)</p>
+                <li>
+                  {raffleV0.give.map((item) => (
+                    <p key={item}>・{item}</p>
+                  ))}
                 </li>
-              ))}
-            </ul>
+                <p className="font-bold">求)</p>
+                <li>
+                  {raffleV0.want.map((item) => (
+                    <p key={item}>・{item}</p>
+                  ))}
+                </li>
+              </ul>
+            ))}
           </div>
         </div>
       )}
@@ -77,13 +96,34 @@ export default async function SiitaRaffleV0() {
           <div className="w-[320px]">
             <h1 className="text-center text-2xl font-bold">一覧:</h1>
             <div className="mt-4">
-              <ul>
+              <div>
                 {PagenatedRaffleV0.items.map((raffleV0) => (
-                  <li key={raffleV0.id}>
-                    <p>{raffleV0.give}</p>
-                  </li>
+                  <ul className="m-2 rounded-xl border p-4" key={raffleV0.id}>
+                    <div className="flex justify-between">
+                      <Link
+                        href={`https://x.com/${encodeURIComponent(raffleV0.xid)}`}
+                        className="underline"
+                        target="_blank"
+                      >
+                        @{raffleV0.xid}
+                      </Link>
+                      <p>{getRaffleStatusLabel(raffleV0.status)}</p>
+                    </div>
+                    <p className="mt-2 font-bold">譲)</p>
+                    <li>
+                      {raffleV0.give.map((item) => (
+                        <p key={item}>・{item}</p>
+                      ))}
+                    </li>
+                    <p className="font-bold">求)</p>
+                    <li>
+                      {raffleV0.want.map((item) => (
+                        <p key={item}>・{item}</p>
+                      ))}
+                    </li>
+                  </ul>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>

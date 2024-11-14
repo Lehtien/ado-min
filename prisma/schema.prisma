@@ -33,14 +33,20 @@ model Post {
     @@index([createdById])
 }
 
+enum RaffleStatus {
+  OPEN      // 募集中
+  CLOSED    // 終了
+  ADJUSTING // 交渉中
+}
+
 model RaffleV0 {
     id         Int      @id @default(autoincrement())
     xid        String
+    status     RaffleStatus @default(OPEN)
     give       String[]
     want       String[]
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
-
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String @unique
 

@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-
 import Items, { type CheckboxItem } from "../../_components/Items";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { RAFFLE_STATUSES } from "../../../constants/raffle";
 
 export default function SiitaRaffleV0Edit() {
   const [xid, setXid] = useState("");
+  const [status, setStatus] = useState("OPEN");
   const [giveItems, setGiveItems] = useState<CheckboxItem[][]>([]);
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
 
@@ -60,11 +62,18 @@ export default function SiitaRaffleV0Edit() {
     setXid(value);
   };
 
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStatus(e.target.value);
+  };
+
   return (
     <div>
-      <h1 className="text-center text-2xl font-bold">
+      <Link
+        href="/siita-raffle-v0"
+        className="my-4 block text-center text-2xl font-bold"
+      >
         ファントムシータ Raffleくじ
-      </h1>
+      </Link>
       <form onSubmit={handleSubmit}>
         <div>
           <p className="mx-2">X(twitter)ID</p>
@@ -77,6 +86,23 @@ export default function SiitaRaffleV0Edit() {
             className="mx-1 w-1/3 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             required
           />
+        </div>
+        <div className="ml-4 mt-6">
+          {RAFFLE_STATUSES.map((item) => (
+            <div key={item.value} className="flex items-center space-x-2">
+              <input
+                type="radio"
+                id={item.value}
+                value={item.value}
+                checked={status === item.value}
+                onChange={handleStatusChange}
+                className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor={item.value} className="text-sm font-medium">
+                {item.label}
+              </label>
+            </div>
+          ))}
         </div>
         <div className="md: mt-8 flex flex-wrap gap-2 md:justify-center">
           <div>
