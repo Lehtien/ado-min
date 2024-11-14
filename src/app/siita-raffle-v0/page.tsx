@@ -61,7 +61,9 @@ export default async function SiitaRaffleV0() {
       {LatestRaffleV0 && (
         <div className="flex justify-center">
           <div className="w-[320px]">
-            <h1 className="text-center text-2xl font-bold">最新:</h1>
+            <h1 className="text-center text-2xl font-bold">
+              交換できそうな投稿:
+            </h1>
             {FilterRaffleV0?.map((raffleV0) => (
               <ul className="m-2 rounded-xl border p-4" key={raffleV0.id}>
                 <div className="flex justify-between">
