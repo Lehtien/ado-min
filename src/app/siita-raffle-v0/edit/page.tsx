@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Items, { type CheckboxItem } from "../../_components/Items";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
@@ -15,21 +15,6 @@ export default function SiitaRaffleV0Edit() {
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
 
   const router = useRouter();
-
-  const {
-    data: LatestRaffleV0,
-    isLoading,
-    error,
-  } = api.raffleV0.getLatest.useQuery();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  } else if (error) {
-    console.error("Failed to fetch latest raffle:", error);
-    return <div>{error.message}</div>;
-  }
-
-  setXid(LatestRaffleV0?.xid ?? "");
-  setStatus(LatestRaffleV0?.status ?? "OPEN");
 
   const createRaffleMutation = api.raffleV0.create.useMutation({
     onSuccess: () => {
@@ -100,6 +85,28 @@ export default function SiitaRaffleV0Edit() {
   #ファントムシータ
   #LARMEfes
   `;
+
+  const {
+    data: LatestRaffleV0,
+    isLoading,
+    error,
+  } = api.raffleV0.getLatest.useQuery();
+
+  useEffect(() => {
+    if (LatestRaffleV0) {
+      setXid(LatestRaffleV0.xid);
+      setStatus(LatestRaffleV0.status);
+    }
+  }, [LatestRaffleV0]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    console.error("Failed to fetch latest raffle:", error);
+    return <div>{error.message}</div>;
+  }
 
   return (
     <div>
