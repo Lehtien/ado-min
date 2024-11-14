@@ -9,17 +9,26 @@ import { RAFFLE_STATUSES } from "../../../constants/raffle";
 import ShareButton from "~/app/_components/XShare";
 
 export default function SiitaRaffleV0Edit() {
-  const { data: LatestRaffleV0, error } = api.raffleV0.getLatest.useQuery();
-  if (error) {
-    console.error("Failed to fetch latest raffle:", error);
-  }
-
-  const [xid, setXid] = useState(LatestRaffleV0?.xid ?? "");
-  const [status, setStatus] = useState(LatestRaffleV0?.status ?? "OPEN");
+  const [xid, setXid] = useState("");
+  const [status, setStatus] = useState("OPEN");
   const [giveItems, setGiveItems] = useState<CheckboxItem[][]>([]);
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
 
   const router = useRouter();
+
+  const {
+    data: LatestRaffleV0,
+    isLoading,
+    error,
+  } = api.raffleV0.getLatest.useQuery();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  } else if (error) {
+    console.error("Failed to fetch latest raffle:", error);
+  }
+
+  setXid(LatestRaffleV0?.xid ?? "");
+  setStatus(LatestRaffleV0?.status ?? "OPEN");
 
   const createRaffleMutation = api.raffleV0.create.useMutation({
     onSuccess: () => {
