@@ -9,8 +9,13 @@ import { RAFFLE_STATUSES } from "../../../constants/raffle";
 import ShareButton from "~/app/_components/XShare";
 
 export default function SiitaRaffleV0Edit() {
-  const [xid, setXid] = useState("");
-  const [status, setStatus] = useState("OPEN");
+  const { data: LatestRaffleV0, error } = api.raffleV0.getLatest.useQuery();
+  if (error) {
+    console.error("Failed to fetch latest raffle:", error);
+  }
+
+  const [xid, setXid] = useState(LatestRaffleV0?.xid ?? "");
+  const [status, setStatus] = useState(LatestRaffleV0?.status ?? "OPEN");
   const [giveItems, setGiveItems] = useState<CheckboxItem[][]>([]);
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
 
@@ -85,11 +90,6 @@ export default function SiitaRaffleV0Edit() {
   #ファントムシータ
   #LARMEfes
   `;
-
-  const { data: LatestRaffleV0, error } = api.raffleV0.getLatest.useQuery();
-  if (error) {
-    console.error("Failed to fetch latest raffle:", error);
-  }
 
   return (
     <div>
