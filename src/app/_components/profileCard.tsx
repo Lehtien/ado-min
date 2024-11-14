@@ -42,7 +42,7 @@ export default function ProfileCard(latestPost: PostSchemaType) {
             <p className="font-bold">X(Twitter) アカウント</p>
             <p className="underline">
               <Link
-                href={`https://x.com/${encodeURIComponent(latestPost.account)}`}
+                href={`https://x.com/${encodeURIComponent(latestPost.account.replace("@", ""))}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

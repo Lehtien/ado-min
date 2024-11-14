@@ -1,4 +1,5 @@
 import { postRouter } from "~/server/api/routers/post";
+import { raffleV0Router } from "~/server/api/routers/raffleV0";
 import { screenshotRouter } from "~/server/api/routers/screenshot";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
@@ -9,6 +10,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  raffleV0: raffleV0Router,
   screenshot: screenshotRouter,
 });
 

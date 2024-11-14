@@ -33,6 +33,20 @@ model Post {
     @@index([createdById])
 }
 
+model RaffleV0 {
+    id         Int      @id @default(autoincrement())
+    xid        String
+    give       String[]
+    want       String[]
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String @unique
+
+    @@index([createdById])
+}
+
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
@@ -70,6 +84,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     post          Post?
+    raffleV0      RaffleV0?
 }
 
 model VerificationToken {

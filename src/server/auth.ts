@@ -50,6 +50,9 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      return `/siita-raffle-v0`;
+    },
     session: ({ session, user, token }) => ({
       ...session,
       user: {
@@ -81,16 +84,20 @@ export const authOptions: NextAuthOptions = {
           scope: "users.read tweet.read offline.access",
         },
       },
-      profile(profile: { data: {
-        profile_image_url: string | null | undefined; id: string; name: string 
-} }) {
+      profile(profile: {
+        data: {
+          profile_image_url: string | null | undefined;
+          id: string;
+          name: string;
+        };
+      }) {
         return {
           id: profile.data.id,
           name: profile.data.name,
           email: null, // Twitter doesn't provide email by default
           image: profile.data.profile_image_url,
         };
-      }
+      },
     }),
     ...(isDevelopment
       ? [
@@ -99,7 +106,11 @@ export const authOptions: NextAuthOptions = {
             name: "Development",
             credentials: {},
             authorize: async () => {
-              return { id: "dev-user2", name: "Dev User", email: "dev@example.com" };
+              return {
+                id: "dev-user2",
+                name: "Dev User",
+                email: "dev@example.com",
+              };
             },
           }),
         ]
