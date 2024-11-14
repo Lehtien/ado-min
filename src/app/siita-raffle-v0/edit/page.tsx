@@ -6,6 +6,7 @@ import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RAFFLE_STATUSES } from "../../../constants/raffle";
+import ShareButton from "~/app/_components/XShare";
 
 export default function SiitaRaffleV0Edit() {
   const [xid, setXid] = useState("");
@@ -66,6 +67,25 @@ export default function SiitaRaffleV0Edit() {
     setStatus(e.target.value);
   };
 
+  const giveItemsText = giveItems
+    .flat()
+    .filter((item) => item.checked)
+    .map((item) => `・${item.label}`)
+    .join("\n");
+  const wantItemsText = wantItems
+    .flat()
+    .filter((item) => item.checked)
+    .map((item) => `・${item.label}`)
+    .join("\n");
+  const xText = `ファントムシータ LARME fes vol.1 出演記念 ラッフル くじ RAFFLE
+  譲)
+  ${giveItemsText}
+  求)
+  ${wantItemsText}
+  #ファントムシータ
+  #LARMEfes
+  `;
+
   return (
     <div>
       <Link
@@ -113,6 +133,12 @@ export default function SiitaRaffleV0Edit() {
             <h1 className="text-xl font-bold">・求めるもの</h1>
             <Items name="want" onChange={setWantItems} />
           </div>
+        </div>
+        <div className="mt-8 text-center">
+          <ShareButton
+            text={xText}
+            url="https://ado-min.vercel.app/siita-raffle-v0"
+          />
         </div>
         <div className="my-8 flex justify-center">
           <button
