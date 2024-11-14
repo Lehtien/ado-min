@@ -7,5 +7,5 @@ export const RAFFLE_STATUSES = [
 export type RaffleStatus = (typeof RAFFLE_STATUSES)[number]["value"];
 
 export const getRaffleStatusLabel = (status: RaffleStatus) => {
-  return RAFFLE_STATUSES.find((s) => s.value === status)?.label ?? status;
+  return RAFFLE_STATUSES.find((s) => s.value === status)?.label;
 };
