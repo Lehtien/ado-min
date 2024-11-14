@@ -25,6 +25,7 @@ export default function SiitaRaffleV0Edit() {
     return <div>Loading...</div>;
   } else if (error) {
     console.error("Failed to fetch latest raffle:", error);
+    return <div>{error.message}</div>;
   }
 
   setXid(LatestRaffleV0?.xid ?? "");
