@@ -14,7 +14,7 @@ interface ItemsProps {
   onChange?: (items: CheckboxItem[][]) => void;
 }
 
-const Items = ({ item, onChange }: ItemsProps) => {
+const Items = ({ onChange }: ItemsProps) => {
   const createInitialData = (): CheckboxItem[][] => {
     return [
       [
