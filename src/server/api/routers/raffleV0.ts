@@ -121,12 +121,14 @@ export const raffleV0Router = createTRPCRouter({
         where: { createdById: ctx.session.user.id },
         update: {
           xid: input.xid,
+          status: input.status,
           give,
           want,
           updatedAt: new Date(),
         },
         create: {
           xid: input.xid,
+          status: input.status,
           give,
           want,
           createdBy: { connect: { id: ctx.session.user.id } },
