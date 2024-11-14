@@ -97,14 +97,17 @@ const Items = ({ item, onChange }: ItemsProps) => {
     ];
   };
 
-  let initialData = createInitialData();
+  const initialData = createInitialData();
   if (item.length !== 0) {
-    initialData = initialData.map((row) =>
-      row.map((item) => ({
-        ...item,
-        checked: item.label.includes(item.label),
-      })),
-    );
+    for (const i of item) {
+      for (const j of initialData) {
+        for (const k of j) {
+          if (i === k.label) {
+            k.checked = true;
+          }
+        }
+      }
+    }
   }
 
   const [items, setItems] = useState<CheckboxItem[][]>(initialData);
