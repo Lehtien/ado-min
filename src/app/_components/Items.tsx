@@ -11,7 +11,6 @@ export interface CheckboxItem {
 
 interface ItemsProps {
   name: string;
-  item: string[];
   onChange?: (items: CheckboxItem[][]) => void;
 }
 
@@ -98,18 +97,6 @@ const Items = ({ item, onChange }: ItemsProps) => {
   };
 
   const initialData = createInitialData();
-  if (item.length !== 0) {
-    for (const i of item) {
-      for (const j of initialData) {
-        for (const k of j) {
-          if (i === k.label) {
-            k.checked = true;
-          }
-        }
-      }
-    }
-  }
-
   const [items, setItems] = useState<CheckboxItem[][]>(initialData);
 
   const handleCheck = (row: number, col: number): void => {
