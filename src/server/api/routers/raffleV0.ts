@@ -101,6 +101,11 @@ export const raffleV0Router = createTRPCRouter({
     .input(
       z.object({
         xid: z.string(),
+        status: z.union([
+          z.literal("OPEN"),
+          z.literal("CLOSED"),
+          z.literal("ADJUSTING"),
+        ]),
         give: z.array(z.string()),
         want: z.array(z.string()),
       }),

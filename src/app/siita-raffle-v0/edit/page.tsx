@@ -5,12 +5,12 @@ import Items, { type CheckboxItem } from "../../_components/Items";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { RAFFLE_STATUSES } from "../../../constants/raffle";
+import { RAFFLE_STATUSES, type RaffleStatus } from "../../../constants/raffle";
 import ShareButton from "~/app/_components/XShare";
 
 export default function SiitaRaffleV0Edit() {
   const [xid, setXid] = useState("");
-  const [status, setStatus] = useState("OPEN");
+  const [status, setStatus] = useState<RaffleStatus>("OPEN");
   const [giveItems, setGiveItems] = useState<CheckboxItem[][]>([]);
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
 
@@ -47,6 +47,7 @@ export default function SiitaRaffleV0Edit() {
 
     createRaffleMutation.mutate({
       xid: xid.trim(),
+      status: status,
       give: checkedGiveItems,
       want: checkedWantItems,
     });
