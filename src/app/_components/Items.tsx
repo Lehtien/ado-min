@@ -100,6 +100,11 @@ const Items = ({ item, onChange }: ItemsProps) => {
 
   const isFirstRender = useRef(true);
   useEffect(() => {
+    return () => {
+      isFirstRender.current = true;
+    };
+  }, []);
+  useEffect(() => {
     if (isFirstRender.current && item) {
       setItems((prevItems) =>
         prevItems.map((row) =>
