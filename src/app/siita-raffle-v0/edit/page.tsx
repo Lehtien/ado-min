@@ -94,22 +94,76 @@ export default function SiitaRaffleV0Edit() {
   } = api.raffleV0.getLatest.useQuery();
 
   useEffect(() => {
-    console.log("Effect triggered. LatestRaffleV0:", LatestRaffleV0);
-    if (LatestRaffleV0) {
-      setXid(LatestRaffleV0.xid);
-      setStatus(LatestRaffleV0.status);
+    const abortController = new AbortController();
+    let isMounted = true;
 
-      setGiveItems(
-        LatestRaffleV0.give.map((item, index) => [
-          { id: `give-${index}`, label: item, checked: true },
-        ]),
-      );
-      setWantItems(
-        LatestRaffleV0.want.map((item, index) => [
-          { id: `want-${index}`, label: item, checked: true },
-        ]),
-      );
-    }
+    console.log("Effect triggered. LatestRaffleV0:", LatestRaffleV0);
+
+    const initialState = {
+      xid: "",
+      status: RAFFLE_STATUSES[0].value,
+      giveItems: [],
+      wantItems: [],
+    };
+
+    const resetState = () => {
+      if (!isMounted) return;
+
+      console.log("Resetting state");
+      setXid(initialState.xid);
+      setStatus(initialState.status);
+      setGiveItems(initialState.giveItems);
+      setWantItems(initialState.wantItems);
+    };
+
+    const updateState = async () => {
+      try {
+        if (!LatestRaffleV0 || !isMounted) return;
+
+        // 非同期処理のキャンセルをチェック
+        if (abortController.signal.aborted) {
+          console.log("State update was aborted");
+          return;
+        }
+
+        console.log("Updating state with new data");
+
+        setXid(LatestRaffleV0.xid);
+        setStatus(LatestRaffleV0.status);
+
+        if (isMounted && LatestRaffleV0.give) {
+          const newGiveItems = LatestRaffleV0.give.map((item, index) => [
+            { id: `give-${index}`, label: item, checked: true },
+          ]);
+          console.log("Setting give items:", newGiveItems);
+          setGiveItems(newGiveItems);
+        }
+
+        if (isMounted && LatestRaffleV0.want) {
+          const newWantItems = LatestRaffleV0.want.map((item, index) => [
+            { id: `want-${index}`, label: item, checked: true },
+          ]);
+          console.log("Setting want items:", newWantItems);
+          setWantItems(newWantItems);
+        }
+      } catch (error) {
+        console.error("Error updating state:", error);
+        // エラー時は状態をリセット
+        if (isMounted) {
+          resetState();
+        }
+      }
+    };
+
+    void updateState();
+
+    // クリーンアップ関数
+    return () => {
+      console.log("Running cleanup");
+      isMounted = false;
+      abortController.abort();
+      resetState();
+    };
   }, [LatestRaffleV0]);
 
   if (isLoading) {
