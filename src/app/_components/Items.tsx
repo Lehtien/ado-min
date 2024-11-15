@@ -98,35 +98,26 @@ const Items = ({ item, onChange }: ItemsProps) => {
 
   const [items, setItems] = useState<CheckboxItem[][]>(createInitialData());
 
-  const isFirstRender = useRef(true);
   useEffect(() => {
-    return () => {
-      isFirstRender.current = true;
-    };
-  }, []);
-  useEffect(() => {
-    if (isFirstRender.current && item) {
+    if (item) {
       setItems((prevItems) =>
-        prevItems.map((row) =>
-          row.map((data) => ({
+        prevItems.map((row, rowIndex) =>
+          row.map((data, colIndex) => ({
             ...data,
-            checked: item.some((itemRow) =>
-              itemRow.some((i) => i.label === data.label),
-            ),
+            checked: item[rowIndex]?.[colIndex]?.checked ?? data.checked,
           })),
         ),
       );
-      isFirstRender.current = false;
     }
-  }, [item]); // itemが変更されたときに実行
+  }, [item]);
 
   const handleCheck = (row: number, col: number): void => {
     const newItems = items.map((rowItems, rowIndex) =>
-      rowIndex === row
-        ? rowItems.map((item, colIndex) =>
-            colIndex === col ? { ...item, checked: !item.checked } : item,
-          )
-        : rowItems,
+      rowItems.map((item, colIndex) =>
+        rowIndex === row && colIndex === col
+          ? { ...item, checked: !item.checked }
+          : item,
+      ),
     );
     setItems(newItems);
     onChange?.(newItems);
