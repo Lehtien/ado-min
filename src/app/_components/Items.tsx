@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 export interface CheckboxItem {
@@ -97,11 +97,15 @@ const Items = ({ item, onChange }: ItemsProps) => {
     ];
   };
 
-  const initialData = createInitialData();
-  const [items, setItems] = useState<CheckboxItem[][]>(initialData);
-  if (item) {
-    setItems(item);
-  }
+  const [items, setItems] = useState<CheckboxItem[][]>(() => {
+    const initialData = createInitialData();
+    return initialData.map((row) =>
+      row.map((item) => ({
+        ...item,
+        checked: item.checked,
+      })),
+    );
+  });
 
   const handleCheck = (row: number, col: number): void => {
     const newItems = items.map((rowItems, rowIndex) =>
