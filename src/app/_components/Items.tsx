@@ -98,8 +98,14 @@ const Items = ({ item, onChange }: ItemsProps) => {
 
   const [items, setItems] = useState<CheckboxItem[][]>(createInitialData());
 
+  const isFirstRender = useRef(true);
   useEffect(() => {
-    if (item) {
+    return () => {
+      isFirstRender.current = true;
+    };
+  }, []);
+  useEffect(() => {
+    if (isFirstRender.current && item) {
       setItems((prevItems) =>
         prevItems.map((row) =>
           row.map((data) => ({
@@ -110,6 +116,7 @@ const Items = ({ item, onChange }: ItemsProps) => {
           })),
         ),
       );
+      isFirstRender.current = false;
     }
   }, [item]); // itemが変更されたときに実行
 
