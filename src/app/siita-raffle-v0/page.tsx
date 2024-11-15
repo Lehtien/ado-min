@@ -63,7 +63,6 @@ export default async function SiitaRaffleV0() {
           <div className="flex justify-center">
             <div className="w-[320px]">
               <h1 className="text-center text-2xl font-bold">自身の投稿:</h1>
-              <hr />
               <ul className="m-2 rounded-xl border p-4">
                 <div className="flex justify-end">
                   <p>{getRaffleStatusLabel(LatestRaffleV0.status)}</p>
@@ -84,12 +83,13 @@ export default async function SiitaRaffleV0() {
             </div>
           </div>
 
+          <hr />
+
           <div className="flex justify-center">
             <div className="w-[320px]">
               <h1 className="text-center text-2xl font-bold">
                 交換できそうな投稿:
               </h1>
-              <hr />
               {FilterRaffleV0?.map((raffleV0) => (
                 <ul className="m-2 rounded-xl border p-4" key={raffleV0.id}>
                   <div className="flex justify-between">
@@ -118,13 +118,13 @@ export default async function SiitaRaffleV0() {
               ))}
             </div>
           </div>
+          <hr />
         </>
       )}
       {PagenatedRaffleV0 && (
         <div className="flex justify-center">
           <div className="w-[320px]">
             <h1 className="text-center text-2xl font-bold">一覧:</h1>
-            <hr />
             <div className="mt-4">
               <div>
                 {PagenatedRaffleV0.items.map((raffleV0) => (
@@ -156,6 +156,7 @@ export default async function SiitaRaffleV0() {
               </div>
             </div>
           </div>
+          <hr />
         </div>
       )}
     </main>
