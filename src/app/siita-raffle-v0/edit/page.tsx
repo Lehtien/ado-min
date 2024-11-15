@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RAFFLE_STATUSES, type RaffleStatus } from "../../../constants/raffle";
 import ShareButton from "~/app/_components/XShare";
+import { set } from "zod";
 
 export default function SiitaRaffleV0Edit() {
   const [xid, setXid] = useState("");
@@ -92,6 +93,16 @@ export default function SiitaRaffleV0Edit() {
     if (LatestRaffleV0) {
       setXid(LatestRaffleV0.xid);
       setStatus(LatestRaffleV0.status);
+      setGiveItems(
+        LatestRaffleV0.give.map((item, index) => [
+          { id: `give-${index}`, label: item, checked: true },
+        ]),
+      );
+      setWantItems(
+        LatestRaffleV0.want.map((item, index) => [
+          { id: `want-${index}`, label: item, checked: true },
+        ]),
+      );
     }
   }, [LatestRaffleV0]);
 

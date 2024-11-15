@@ -59,39 +59,62 @@ export default async function SiitaRaffleV0() {
         </div>
       </div>
       {LatestRaffleV0 && (
-        <div className="flex justify-center">
-          <div className="w-[320px]">
-            <h1 className="text-center text-2xl font-bold">
-              交換できそうな投稿:
-            </h1>
-            {FilterRaffleV0?.map((raffleV0) => (
-              <ul className="m-2 rounded-xl border p-4" key={raffleV0.id}>
-                <div className="flex justify-between">
-                  <Link
-                    href={`https://x.com/${encodeURIComponent(raffleV0.xid)}`}
-                    className="underline"
-                    target="_blank"
-                  >
-                    @{raffleV0.xid}
-                  </Link>
-                  <p>{getRaffleStatusLabel(raffleV0.status)}</p>
-                </div>
-                <p className="mt-2 font-bold">譲)</p>
+        <>
+          <div className="flex justify-center">
+            <div className="w-[320px]">
+              <h1 className="text-center text-2xl font-bold">自身の投稿:</h1>
+              <p>{getRaffleStatusLabel(LatestRaffleV0.status)}</p>
+              <ul className="m-2 rounded-xl border p-4">
+                <p className="font-bold">譲)</p>
                 <li>
-                  {raffleV0.give.map((item) => (
+                  {LatestRaffleV0.give.map((item) => (
                     <p key={item}>・{item}</p>
                   ))}
                 </li>
                 <p className="font-bold">求)</p>
                 <li>
-                  {raffleV0.want.map((item) => (
+                  {LatestRaffleV0.want.map((item) => (
                     <p key={item}>・{item}</p>
                   ))}
                 </li>
               </ul>
-            ))}
+            </div>
           </div>
-        </div>
+
+          <div className="flex justify-center">
+            <div className="w-[320px]">
+              <h1 className="text-center text-2xl font-bold">
+                交換できそうな投稿:
+              </h1>
+              {FilterRaffleV0?.map((raffleV0) => (
+                <ul className="m-2 rounded-xl border p-4" key={raffleV0.id}>
+                  <div className="flex justify-between">
+                    <Link
+                      href={`https://x.com/${encodeURIComponent(raffleV0.xid)}`}
+                      className="underline"
+                      target="_blank"
+                    >
+                      @{raffleV0.xid}
+                    </Link>
+                    <p>{getRaffleStatusLabel(raffleV0.status)}</p>
+                  </div>
+                  <p className="mt-2 font-bold">譲)</p>
+                  <li>
+                    {raffleV0.give.map((item) => (
+                      <p key={item}>・{item}</p>
+                    ))}
+                  </li>
+                  <p className="font-bold">求)</p>
+                  <li>
+                    {raffleV0.want.map((item) => (
+                      <p key={item}>・{item}</p>
+                    ))}
+                  </li>
+                </ul>
+              ))}
+            </div>
+          </div>
+        </>
       )}
       {PagenatedRaffleV0 && (
         <div className="flex justify-center">
