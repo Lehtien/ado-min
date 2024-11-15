@@ -91,7 +91,12 @@ export default function SiitaRaffleV0Edit() {
     data: LatestRaffleV0,
     isLoading,
     error,
-  } = api.raffleV0.getLatest.useQuery();
+    refetch,
+  } = api.raffleV0.getLatest.useQuery(undefined, {
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
 
   useEffect(() => {
     console.log("Effect triggered. LatestRaffleV0:", LatestRaffleV0);
@@ -116,6 +121,13 @@ export default function SiitaRaffleV0Edit() {
       setWantItems([]);
     };
   }, [LatestRaffleV0]);
+
+  useEffect(() => {
+    return () => {
+      // 必要に応じてデータをリフェッチ
+      void refetch();
+    };
+  }, [refetch]);
 
   if (isLoading) {
     return <div>Loading...</div>;
