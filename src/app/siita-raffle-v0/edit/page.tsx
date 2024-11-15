@@ -13,15 +13,19 @@ export default function SiitaRaffleV0Edit() {
   const [status, setStatus] = useState<RaffleStatus>("OPEN");
   const [giveItems, setGiveItems] = useState<CheckboxItem[][]>([]);
   const [wantItems, setWantItems] = useState<CheckboxItem[][]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
   const createRaffleMutation = api.raffleV0.create.useMutation({
     onSuccess: () => {
+      setIsSubmitting(false);
       alert("保存に成功しました");
       router.push("/siita-raffle-v0");
+      router.refresh(); // ページを強制的に再読み込み
     },
     onError: (error) => {
+      setIsSubmitting(false);
       console.error(error);
       alert("保存に失敗しました");
     },
@@ -29,6 +33,7 @@ export default function SiitaRaffleV0Edit() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!xid.trim()) {
       alert("X(twitter)IDを入力してください");
@@ -177,6 +182,7 @@ export default function SiitaRaffleV0Edit() {
         <div className="my-8 flex justify-center">
           <button
             type="submit"
+            disabled={isSubmitting}
             className="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             保存する
