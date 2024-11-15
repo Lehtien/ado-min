@@ -11,10 +11,11 @@ export interface CheckboxItem {
 
 interface ItemsProps {
   name: string;
+  item: CheckboxItem[][];
   onChange?: (items: CheckboxItem[][]) => void;
 }
 
-const Items = ({ onChange }: ItemsProps) => {
+const Items = ({ item, onChange }: ItemsProps) => {
   const createInitialData = (): CheckboxItem[][] => {
     return [
       [
@@ -98,6 +99,9 @@ const Items = ({ onChange }: ItemsProps) => {
 
   const initialData = createInitialData();
   const [items, setItems] = useState<CheckboxItem[][]>(initialData);
+  if (item) {
+    setItems(item);
+  }
 
   const handleCheck = (row: number, col: number): void => {
     const newItems = items.map((rowItems, rowIndex) =>
