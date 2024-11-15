@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export interface CheckboxItem {
   id: string;
@@ -100,9 +99,11 @@ const Items = ({ item, onChange }: ItemsProps) => {
   const [items, setItems] = useState<CheckboxItem[][]>(() => {
     const initialData = createInitialData();
     return initialData.map((row) =>
-      row.map((item) => ({
-        ...item,
-        checked: item.checked,
+      row.map((data) => ({
+        ...data,
+        checked: item.some((itemRow) =>
+          itemRow.some((item) => item.label === data.label),
+        ),
       })),
     );
   });
