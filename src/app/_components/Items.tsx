@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export interface CheckboxItem {
   id: string;
@@ -96,30 +96,22 @@ const Items = ({ item, onChange }: ItemsProps) => {
     ];
   };
 
-  const [items, setItems] = useState<CheckboxItem[][]>(() => {
-    const initialData = createInitialData();
+  const [items, setItems] = useState<CheckboxItem[][]>(createInitialData());
 
-    // デバッグ用のログ
-    console.log("Initial Data:", initialData);
-    console.log("Item Data:", item);
-
-    return initialData.map((row) =>
-      row.map((data) => {
-        // 現在のitemからマッチするものを探す
-        const isChecked = item?.some((itemRow) =>
-          itemRow.some((i) => i.label === data.label),
-        );
-
-        // デバッグ用のログ
-        console.log(`Checking ${data.label}: ${isChecked}`);
-
-        return {
-          ...data,
-          checked: isChecked,
-        };
-      }),
-    );
-  });
+  useEffect(() => {
+    if (item) {
+      setItems((prevItems) =>
+        prevItems.map((row) =>
+          row.map((data) => ({
+            ...data,
+            checked: item.some((itemRow) =>
+              itemRow.some((i) => i.label === data.label),
+            ),
+          })),
+        ),
+      );
+    }
+  }, [item]); // itemが変更されたときに実行
 
   const handleCheck = (row: number, col: number): void => {
     const newItems = items.map((rowItems, rowIndex) =>
