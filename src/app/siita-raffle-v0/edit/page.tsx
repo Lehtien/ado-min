@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Items, { type CheckboxItem } from "../../_components/Items";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
@@ -88,10 +88,12 @@ export default function SiitaRaffleV0Edit() {
     error,
   } = api.raffleV0.getLatest.useQuery();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    console.log("Effect triggered. LatestRaffleV0:", LatestRaffleV0);
     if (LatestRaffleV0) {
       setXid(LatestRaffleV0.xid);
       setStatus(LatestRaffleV0.status);
+
       setGiveItems(
         LatestRaffleV0.give.map((item, index) => [
           { id: `give-${index}`, label: item, checked: true },

@@ -96,6 +96,8 @@ const Items = ({ item, onChange }: ItemsProps) => {
     ];
   };
 
+  console.log("item:");
+  console.dir(item);
   const [items, setItems] = useState<CheckboxItem[][]>(() => {
     const initialData = createInitialData();
     return initialData.map((row) =>
