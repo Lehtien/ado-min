@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export interface CheckboxItem {
   id: string;
@@ -98,8 +98,9 @@ const Items = ({ item, onChange }: ItemsProps) => {
 
   const [items, setItems] = useState<CheckboxItem[][]>(createInitialData());
 
+  const isFirstRender = useRef(true);
   useEffect(() => {
-    if (item) {
+    if (isFirstRender.current && item) {
       setItems((prevItems) =>
         prevItems.map((row) =>
           row.map((data) => ({
@@ -110,6 +111,7 @@ const Items = ({ item, onChange }: ItemsProps) => {
           })),
         ),
       );
+      isFirstRender.current = false;
     }
   }, [item]); // itemが変更されたときに実行
 
