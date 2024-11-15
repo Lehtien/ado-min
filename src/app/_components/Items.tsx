@@ -96,17 +96,28 @@ const Items = ({ item, onChange }: ItemsProps) => {
     ];
   };
 
-  console.log("item:");
-  console.dir(item);
   const [items, setItems] = useState<CheckboxItem[][]>(() => {
     const initialData = createInitialData();
+
+    // デバッグ用のログ
+    console.log("Initial Data:", initialData);
+    console.log("Item Data:", item);
+
     return initialData.map((row) =>
-      row.map((data) => ({
-        ...data,
-        checked: item.some((itemRow) =>
-          itemRow.some((item) => item.label === data.label),
-        ),
-      })),
+      row.map((data) => {
+        // 現在のitemからマッチするものを探す
+        const isChecked = item?.some((itemRow) =>
+          itemRow.some((i) => i.label === data.label),
+        );
+
+        // デバッグ用のログ
+        console.log(`Checking ${data.label}: ${isChecked}`);
+
+        return {
+          ...data,
+          checked: isChecked,
+        };
+      }),
     );
   });
 
