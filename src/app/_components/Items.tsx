@@ -113,11 +113,11 @@ const Items = ({ item, onChange }: ItemsProps) => {
 
   const handleCheck = (row: number, col: number): void => {
     const newItems = items.map((rowItems, rowIndex) =>
-      rowItems.map((item, colIndex) =>
-        rowIndex === row && colIndex === col
-          ? { ...item, checked: !item.checked }
-          : item,
-      ),
+      rowIndex === row
+        ? rowItems.map((item, colIndex) =>
+            colIndex === col ? { ...item, checked: !item.checked } : item,
+          )
+        : rowItems,
     );
     setItems(newItems);
     onChange?.(newItems);
