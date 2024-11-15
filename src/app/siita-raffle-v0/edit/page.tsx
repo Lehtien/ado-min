@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import Items, { type CheckboxItem } from "../../_components/Items";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RAFFLE_STATUSES, type RaffleStatus } from "../../../constants/raffle";
 import ShareButton from "~/app/_components/XShare";
-import { set } from "zod";
 
 export default function SiitaRaffleV0Edit() {
   const [xid, setXid] = useState("");
@@ -89,7 +88,7 @@ export default function SiitaRaffleV0Edit() {
     error,
   } = api.raffleV0.getLatest.useQuery();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (LatestRaffleV0) {
       setXid(LatestRaffleV0.xid);
       setStatus(LatestRaffleV0.status);
