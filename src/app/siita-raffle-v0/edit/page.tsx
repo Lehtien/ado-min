@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Items, { type CheckboxItem } from "../../_components/Items";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
@@ -91,6 +91,7 @@ export default function SiitaRaffleV0Edit() {
     data: LatestRaffleV0,
     isLoading,
     error,
+    refetch,
   } = api.raffleV0.getLatest.useQuery(undefined, {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
@@ -120,6 +121,13 @@ export default function SiitaRaffleV0Edit() {
       setWantItems([]);
     };
   }, [LatestRaffleV0]);
+
+  useEffect(() => {
+    return () => {
+      // 必要に応じてデータをリフェッチ
+      void refetch();
+    };
+  }, [refetch]);
 
   if (isLoading) {
     return <div>Loading...</div>;
