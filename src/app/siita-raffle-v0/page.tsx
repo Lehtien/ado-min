@@ -63,8 +63,10 @@ export default async function SiitaRaffleV0() {
           <div className="flex justify-center">
             <div className="w-[320px]">
               <h1 className="text-center text-2xl font-bold">自身の投稿:</h1>
-              <p>{getRaffleStatusLabel(LatestRaffleV0.status)}</p>
               <ul className="m-2 rounded-xl border p-4">
+                <div className="flex justify-end">
+                  <p>{getRaffleStatusLabel(LatestRaffleV0.status)}</p>
+                </div>
                 <p className="font-bold">譲)</p>
                 <li>
                   {LatestRaffleV0.give.map((item) => (
