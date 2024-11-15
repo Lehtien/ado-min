@@ -101,10 +101,12 @@ const Items = ({ item, onChange }: ItemsProps) => {
   useEffect(() => {
     if (item) {
       setItems((prevItems) =>
-        prevItems.map((row, rowIndex) =>
-          row.map((data, colIndex) => ({
+        prevItems.map((row) =>
+          row.map((data) => ({
             ...data,
-            checked: item[rowIndex]?.[colIndex]?.checked ?? data.checked,
+            checked: item.some((itemRow) =>
+              itemRow.some((i) => i.label === data.label && i.checked),
+            ),
           })),
         ),
       );
